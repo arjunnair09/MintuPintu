@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arjun & Minty</title>
+    <style>
+        /* --- LOCK SCREEN --- */
+        #site-content { display: none; } 
+
+        /* --- STYLING --- */
+        :root {
+            --primary: #d4a5a5;    /* Dusty Rose */
+            --primary-dark: #b88686;
+            --secondary: #f3e5f5;  /* Soft Lavender */
+            --text: #4a4a4a;
+            --accent: #9e7777;
+            --bg: #fdfbf7;         /* Cream */
+            --success: #a5d4a9;    /* Soft Green for high progress */
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* NAVIGATION */
+        nav {
+            background: #fff;
+            padding: 1rem 0;
+            position: sticky; top: 0; z-index: 1000;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow-x: auto; /* Allow scrolling on small phones */
+            white-space: nowrap;
+        }
+
+        nav a {
+            display: inline-block;
+            margin: 0 10px;
+            text-decoration: none;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 5px;
+        }
+
+        nav a.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+
+        main { flex: 1; max-width: 800px; margin: 0 auto; padding: 20px; text-align: center; width: 100%; box-sizing: border-box;}
+
+        section { display: none; animation: fadeIn 0.6s ease; }
+        section.active { display: block; }
+
+        h1 { color: var(--accent); font-size: 2rem; margin: 10px 0; }
+        h2 { color: var(--primary); margin-top: 0; font-size: 1.5rem; }
+        p { line-height: 1.6; color: #666; }
+
+        /* HERO & PHOTO */
+        .hero-heart { font-size: 3rem; color: var(--primary); animation: beat 1.5s infinite; }
+        .photo-frame {
+            background: white; padding: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transform: rotate(-2deg); margin: 20px auto;
+            max-width: 90%; border-radius: 4px;
+        }
+        .photo-frame img { width: 100%; border-radius: 2px; }
+
+        /* ISSUES / GROWTH TRACKER */
+        .issue-card {
+            background: white;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+
+        .issue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .issue-title { font-weight: bold; color: var(--accent); font-size: 1.1rem; }
+        .issue-desc { font-size: 0.95rem; color: #666; margin-bottom: 15px; font-style: italic; }
+
+        .progress-container {
+            background-color: #eee;
+            border-radius: 20px;
+            height: 20px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            background-color: var(--primary);
+            height: 100%;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            transition: width 1s ease-in-out;
+            min-width: 10%; /* Ensure text fits */
+        }
+
+        /* COUPONS */
+        .coupon-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px; margin-top: 20px;
+        }
+        .coupon {
+            background: #fff; border: 2px dashed var(--primary);
+            padding: 15px; border-radius: 8px; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .coupon:hover { transform: scale(1.02); background: var(--secondary); }
+        .coupon h3 { margin: 0 0 5px 0; font-size: 0.95rem; color: var(--accent); }
+        .coupon p { font-size: 0.85rem; margin: 0; }
+        .redeemed { text-decoration: line-through; opacity: 0.5; background: #eee; }
+
+        /* EMBEDS */
+        .embed-container {
+            background: white; padding: 10px; border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; overflow: hidden;
+        }
+        iframe { width: 100%; border: none; }
+
+        /* LISTS */
+        .activity-list { list-style: none; padding: 0; text-align: left; }
+        .activity-list li {
+            background: #fff; border-bottom: 1px solid #eee;
+            padding: 12px; display: flex; align-items: center;
+        }
+        .activity-list li::before { content: "✈️"; margin-right: 10px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes beat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <script>
+        const pass = prompt("Enter password:");
+        if (pass === "love123") {
+            document.write('<style>#site-content { display: block !important; }</style>');
+        } else {
+            alert("Wrong password."); window.stop();
+        }
+    </script>
+
+    <div id="site-content">
+        <nav>
+            <a onclick="show('home')" id="nav-home" class="active">Home</a>
+            <a onclick="show('growth')" id="nav-growth">Growth</a> <a onclick="show('board')" id="nav-board">Venting</a>
+            <a onclick="show('music')" id="nav-music">Music</a>
+            <a onclick="show('coupons')" id="nav-coupons">Coupons</a>
+            <a onclick="show('ldr')" id="nav-ldr">List</a>
+        </nav>
+
+        <main>
+            <section id="home" class="active">
+                <div class="hero-heart">♥</div>
+                <h1>Arjun & Minty</h1>
+                <p>Together, we are building something beautiful.</p>
+                <div class="photo-frame">
+                    <img src="us.jpg" alt="Us" onerror="this.src='https://via.placeholder.com/400x300?text=Upload+us.jpg+to+GitHub';">
+                </div>
+            </section>
+
+            <section id="growth">
+                <h2>Relationship Growth</h2>
+                <p>Things we are working on to make "Us" better.</p>
+                <br>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <span class="issue-title">Communication on Weekdays</span>
+                    </div>
+                    <div class="issue-desc">Making sure we say goodnight properly even when busy.</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 50%;">50%</div>
+                    </div>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <span class="issue-title">Planning the Next Trip</span>
+                    </div>
+                    <div class="issue-desc">Agreeing on dates and saving up budget.</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 20%;">20%</div>
+                    </div>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <span class="issue-title">Less Screen Time on Calls</span>
+                    </div>
+                    <div class="issue-desc">Focusing on each other instead of scrolling while talking.</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 80%; background-color: var(--success);">80%</div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="board">
+                <h2>The Venting Zone</h2>
+                <p>A safe space to write it all out.</p>
+                <div class="embed-container" style="height: 500px;">
+                    <iframe src="https://padlet.com/embed/placeholder" style="width:100%; height:100%; display:block"></iframe>
+                </div>
+            </section>
+
+            <section id="music">
+                <h2>Our Soundtrack</h2>
+                <div class="embed-container">
+                    <iframe style="border-radius:12px" src="http://googleusercontent.com/spotify.com/2" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+            </section>
+
+            <section id="coupons">
+                <h2>Love Coupons</h2>
+                <div class="coupon-grid">
+                    <div class="coupon" onclick="redeem(this)"><h3>🍕 UberEats Treat</h3><p>I order your fav meal.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>😴 Sleep Call</h3><p>We sleep on video.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>🏳️ Argument Veto</h3><p>Stop the fight.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>💌 Snail Mail</h3><p>I send a real letter.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>🛍️ Online Shop</h3><p>Small gift ($20).</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>🥺 Attention</h3><p>10 mins undivided.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>🎤 Serenade Me</h3><p>Send a singing note.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>📸 Selfie Spam</h3><p>5 unedited photos.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>🎬 Movie Choice</h3><p>You pick the film.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>🎲 Game Night</h3><p>We play online.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>👗 Outfit Check</h3><p>Fashion show on call.</p></div>
+                    <div class="coupon" onclick="redeem(this)"><h3>🌅 Morning Call</h3><p>I wake you up.</p></div>
+                </div>
+            </section>
+
+            <section id="ldr">
+                <h2>Bucket List</h2>
+                <ul class="activity-list">
+                    <li>Watch a movie on Teleparty</li>
+                    <li>Cook the same meal on video call</li>
+                    <li>Send a "Care Package"</li>
+                    <li>Plan our reunion itinerary</li>
+                    <li>Play Stardew Valley together</li>
+                    <li>Read the same book</li>
+                    <li>Create a joint vision board</li>
+                    <li>Send a surprise dessert delivery</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function show(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('nav-' + id).classList.add('active');
+        }
+        function redeem(el) {
+            if(!el.classList.contains('redeemed') && confirm("Redeem this coupon?")) {
+                el.classList.add('redeemed'); alert("Redeemed! Send screenshot to Arjun.");
+            }
+        }
+    </script>
+</body>
+</html>
